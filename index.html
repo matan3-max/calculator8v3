@@ -1,10 +1,6 @@
 <!DOCTYPE html>
 <html lang="he" dir="rtl">
 <head>
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1756702472007434"
-     crossorigin="anonymous"></script>
-
-    
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>מחשבון מילואים 2026 - מהדורת AI</title>
@@ -225,8 +221,12 @@
 
     <script>
         // API Config
-        // שים לב: ב-Vercel עליך להחליף את המחרוזת הריקה במפתח API שלך מ-Google AI Studio
-        const apiKey = ""; 
+        // ב-Vercel, יש להוסיף Environment Variable בשם NEXT_PUBLIC_GEMINI_API_KEY
+        // או פשוט להדביק כאן את המפתח בין הגרשיים אם זה לשימוש פרטי
+        const apiKey = typeof process !== 'undefined' && process.env.NEXT_PUBLIC_GEMINI_API_KEY 
+                       ? process.env.NEXT_PUBLIC_GEMINI_API_KEY 
+                       : ""; 
+
         let currentStep = 1;
         const totalSteps = 3;
 
@@ -355,8 +355,9 @@
         // --- GEMINI API INTEGRATIONS ---
 
         async function callGemini(prompt, systemInstruction = "You are an expert on Israeli military reserve benefits.") {
-            if (!apiKey || apiKey === "") {
-                return "שגיאה: מפתח ה-API חסר. אם העלית את הקוד ל-Vercel, עליך להגדיר את המפתח במשתנה apiKey בקוד.";
+            // בדיקת מפתח - אם ריק, מחזיר הודעה ברורה
+            if (!apiKey || apiKey === "" || apiKey === "undefined") {
+                return "שימו לב: ניתוח ה-AI אינו זמין כי מפתח ה-API לא הוגדר. אם אתם המפתחים, הגדירו את apiKey בקוד או כמשתנה סביבה ב-Vercel.";
             }
 
             const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
@@ -376,15 +377,24 @@
                     
                     if (!response.ok) {
                         const err = await response.json();
-                        return `שגיאת API (${response.status}): ${err.error?.message || 'לא ידוע'}`;
+                        // במקרה של שגיאת מפתח לא תקין
+                        if (response.status === 400 || response.status === 403) {
+                            return "שגיאה: מפתח ה-API שהוזן אינו תקין או שאין לו הרשאות מתאימות.";
+                        }
+                        return `שגיאת API (${response.status}): ${err.error?.message || 'שגיאה לא ידועה'}`;
                     }
 
                     const result = await response.json();
                     const aiText = result.candidates?.[0]?.content?.parts?.[0]?.text;
-                    return aiText || "לא התקבלה תשובה מהמודל.";
+                    
+                    if (!aiText) {
+                        return "ה-AI לא הצליח לגבש תשובה לנתונים אלו. נסו שוב.";
+                    }
+                    
+                    return aiText;
                 } catch (e) {
                     retryCount++;
-                    if (retryCount >= maxRetries) return "שגיאת תקשורת: וודא שהחיבור לאינטרנט תקין ושהמפתח תקין.";
+                    if (retryCount >= maxRetries) return "שגיאת תקשורת: וודא שהחיבור לאינטרנט תקין ושהמפתח תקין. (Retries Exhausted)";
                     await new Promise(r => setTimeout(r, Math.pow(2, retryCount) * 1000));
                 }
             }
