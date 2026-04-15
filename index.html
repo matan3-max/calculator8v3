@@ -221,11 +221,10 @@
 
     <script>
         // API Config
-        // ב-Vercel, יש להוסיף Environment Variable בשם NEXT_PUBLIC_GEMINI_API_KEY
-        // או פשוט להדביק כאן את המפתח בין הגרשיים אם זה לשימוש פרטי
-        const apiKey = typeof process !== 'undefined' && process.env.NEXT_PUBLIC_GEMINI_API_KEY 
-                       ? process.env.NEXT_PUBLIC_GEMINI_API_KEY 
-                       : ""; 
+        // ב-Vercel, מפתח ה-API חייב להיות מוזן כאן בין הגרשיים כדי לעבוד.
+        // תוכל גם להעביר אותו בכתובת האתר כך: ?key=YOUR_KEY
+        const urlParams = new URLSearchParams(window.location.search);
+        const apiKey = urlParams.get('key') || ""; 
 
         let currentStep = 1;
         const totalSteps = 3;
@@ -305,7 +304,6 @@
             let bonuses_total = 0;
             const list = [];
 
-            // Updated Minimum Daily Reward for 2026
             const min_daily = 328.76;
             let daily_base = data.salary / 30;
             
@@ -315,7 +313,6 @@
                 daily_base *= 1.25;
             }
             
-            // Apply minimum guard
             if (daily_base < min_daily) daily_base = min_daily;
             
             salary_total = daily_base * data.days_2026;
@@ -325,7 +322,6 @@
                 desc: `${data.days_2026} ימים בשיעור ${daily_base.toFixed(2)} ש"ח ליום ${data.employment === 'unemployed' ? '(תגמול מינימום)' : ''}` 
             });
 
-            // Example Bonus (simplified for display)
             if (total_cumulative_days > 40) {
                 const b = (data.days_2026 * 50); 
                 bonuses_total += b;
@@ -355,9 +351,8 @@
         // --- GEMINI API INTEGRATIONS ---
 
         async function callGemini(prompt, systemInstruction = "You are an expert on Israeli military reserve benefits.") {
-            // בדיקת מפתח - אם ריק, מחזיר הודעה ברורה
-            if (!apiKey || apiKey === "" || apiKey === "undefined") {
-                return "שימו לב: ניתוח ה-AI אינו זמין כי מפתח ה-API לא הוגדר. אם אתם המפתחים, הגדירו את apiKey בקוד או כמשתנה סביבה ב-Vercel.";
+            if (!apiKey || apiKey === "" || apiKey === "null") {
+                return "מפתח API חסר. עליך להדביק את המפתח בקוד או להוסיף אותו לכתובת האתר כך: ?key=המפתח_שלך";
             }
 
             const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
@@ -377,31 +372,20 @@
                     
                     if (!response.ok) {
                         const err = await response.json();
-                        // במקרה של שגיאת מפתח לא תקין
-                        if (response.status === 400 || response.status === 403) {
-                            return "שגיאה: מפתח ה-API שהוזן אינו תקין או שאין לו הרשאות מתאימות.";
-                        }
-                        return `שגיאת API (${response.status}): ${err.error?.message || 'שגיאה לא ידועה'}`;
+                        return `שגיאה (${response.status}): ${err.error?.message || 'לא ידוע'}`;
                     }
 
                     const result = await response.json();
-                    const aiText = result.candidates?.[0]?.content?.parts?.[0]?.text;
-                    
-                    if (!aiText) {
-                        return "ה-AI לא הצליח לגבש תשובה לנתונים אלו. נסו שוב.";
-                    }
-                    
-                    return aiText;
+                    return result.candidates?.[0]?.content?.parts?.[0]?.text || "לא התקבלה תשובה.";
                 } catch (e) {
                     retryCount++;
-                    if (retryCount >= maxRetries) return "שגיאת תקשורת: וודא שהחיבור לאינטרנט תקין ושהמפתח תקין. (Retries Exhausted)";
+                    if (retryCount >= maxRetries) return "שגיאת תקשורת חמורה.";
                     await new Promise(r => setTimeout(r, Math.pow(2, retryCount) * 1000));
                 }
             }
-            return "מצטערים, חלה שגיאה בחיבור ל-AI. נסה שוב מאוחר יותר.";
+            return "שגיאה בחיבור ל-AI.";
         }
 
-        // Feature 1: AI Insights ✨
         document.getElementById('getAiInsightsBtn').addEventListener('click', async () => {
             const btn = document.getElementById('getAiInsightsBtn');
             const content = document.getElementById('ai-insights-content');
@@ -414,16 +398,14 @@
             const prompt = `נתח את נתוני המילואים הבאים עבור שנת 2026 וספק המלצות למיצוי זכויות:
             נתונים: ${JSON.stringify(lastCalculationResults.data)}
             סכום משוער שחושב: ${lastCalculationResults.total} ש"ח.
-            לתשומת לבך: תגמול המינימום היומי המעודכן הוא ${lastCalculationResults.min_daily_ref} ש"ח.
-            התמקד ב: מענקים מיוחדים, זכויות סטודנטים/עצמאים, תגמולי משפחה וטיפים למילוי טפסים. החזר תשובה בעברית, קצרה וקולעת.`;
+            התמקד ב: מענקים מיוחדים, זכויות סטודנטים/עצמאים, תגמולי משפחה. החזר תשובה בעברית.`;
 
-            const insights = await callGemini(prompt, "אתה יועץ זכויות מילואים מקצועי. המטרה שלך היא לעזור למילואימניקים לקבל את כל מה שמגיע להם בשנת 2026. הייה מעודד ומקצועי. וודא שאתה מתייחס לתגמול המינימום החדש (328.76 ש\"ח) אם המשתמש מובטל או סטודנט.");
+            const insights = await callGemini(prompt, "אתה יועץ זכויות מילואים מקצועי.");
             content.innerText = insights;
             btn.disabled = false;
             btn.innerText = "ניתוח מחדש ✨";
         });
 
-        // Feature 2: AI Chat ✨
         const chatInput = document.getElementById('chat-input');
         const chatSend = document.getElementById('chat-send');
         const chatMessages = document.getElementById('chat-messages');
@@ -432,7 +414,6 @@
             const userMsg = chatInput.value.trim();
             if (!userMsg) return;
 
-            // Display user message
             const userDiv = document.createElement('div');
             userDiv.className = "bg-white p-3 rounded-lg rounded-tl-none mr-4 text-gray-800 border self-end";
             userDiv.innerText = userMsg;
@@ -440,16 +421,12 @@
             chatInput.value = "";
             chatMessages.scrollTop = chatMessages.scrollHeight;
 
-            // Loading state
             const loadingDiv = document.createElement('div');
             loadingDiv.className = "bg-indigo-100 p-3 rounded-lg rounded-tr-none ml-4 text-indigo-900 italic loading-dots";
             loadingDiv.innerText = "חושב";
             chatMessages.appendChild(loadingDiv);
 
-            const systemPrompt = `אתה 'עוזר מילואים חכם'. ענה על שאלות הקשורות למילואים בצה"ל, זכויות בביטוח לאומי, מענקי מלחמה, וכללי שירות.
-            מידע חשוב ומעודכן ל-2026: תגמול המינימום היומי הוא 328.76 ש"ח (עבור מובטלים, סטודנטים ומי ששכרו נמוך מהרף).
-            שמור על טון מפרגן ומחזק.`;
-            const aiResponse = await callGemini(userMsg, systemPrompt);
+            const aiResponse = await callGemini(userMsg, "אתה עוזר מילואים חכם.");
             
             loadingDiv.classList.remove('italic', 'loading-dots');
             loadingDiv.innerText = aiResponse;
@@ -458,7 +435,6 @@
 
         chatSend.addEventListener('click', handleChat);
         chatInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') handleChat(); });
-
     </script>
 </body>
 </html>
