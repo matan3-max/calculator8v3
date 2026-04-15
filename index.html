@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>מחשבון מילואים 2026 - מהדורת AI</title>
+    <title>מחשבון מילואים 2026</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Assistant:wght@300;400;600;700&display=swap');
@@ -18,214 +18,151 @@
             border-color: #ef4444 !important;
             box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.1);
         }
-        .ai-glow {
-            box-shadow: 0 0 15px rgba(99, 102, 241, 0.4);
-            border: 1px solid rgba(99, 102, 241, 0.2);
-        }
-        .loading-dots:after {
-            content: '.';
-            animation: dots 1s steps(5, end) infinite;
-        }
-        @keyframes dots {
-            0%, 20% { content: '.'; }
-            40% { content: '..'; }
-            60% { content: '...'; }
-            80%, 100% { content: ''; }
-        }
     </style>
 </head>
 <body class="p-4 md:p-8 text-right">
 
-    <div class="max-w-4xl mx-auto">
+    <div class="max-w-3xl mx-auto">
         <!-- Header -->
         <header class="text-center mb-8">
-            <h1 class="text-3xl font-bold text-blue-900 mb-2">מחשבון תגמולי מילואים 2026 <span class="text-indigo-600">AI ✨</span></h1>
-            <p class="text-gray-600 italic text-sm">חישוב שכר מעודכן (328.76 ₪ מינימום), מענקים וניתוח זכויות חכם</p>
+            <h1 class="text-3xl font-bold text-blue-900 mb-2">מחשבון תגמולי מילואים 2026</h1>
+            <p class="text-gray-600 italic text-sm">חישוב שכר מעודכן (328.76 ₪ מינימום), מענקים וזכויות</p>
         </header>
 
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            
-            <!-- Main Column: Calculator -->
-            <div class="lg:col-span-2">
-                <!-- Main Form Card -->
-                <div class="card p-6 md:p-10 mb-8" id="calculator-form">
-                    <div id="steps">
-                        <!-- Step 1: Days -->
-                        <div id="step-1" class="step-content active">
-                            <h2 class="text-xl font-semibold mb-6 border-b pb-2 text-blue-800">שלב 1: ימי שירות ומדרג</h2>
-                            <div class="space-y-6">
-                                <div>
-                                    <label class="block font-medium mb-2 text-gray-700">שיוך למדרג פעילות:</label>
-                                    <select id="madrag" class="w-full p-3 border rounded-lg bg-gray-50 focus:ring-2 focus:ring-blue-500 outline-none">
-                                        <option value="a_plus">מדרג א'+ (גדודים לוחמים)</option>
-                                        <option value="a">מדרג א' (חטיבות)</option>
-                                        <option value="b">מדרג ב' (אוגדות)</option>
-                                        <option value="c">מדרג ג' (הגמ"ר)</option>
-                                        <option value="d">מדרג ד' (הדרכה/אבטחה)</option>
-                                        <option value="e">מדרג ה' (פיקודים ומטות)</option>
-                                    </select>
-                                </div>
-                                <div>
-                                    <label class="block font-medium mb-2 text-gray-700">מספר ימי מילואים בשנת 2026:</label>
-                                    <input type="number" id="days_2026" placeholder="הזן מספר ימים" min="1" class="w-full p-3 border rounded-lg bg-gray-50 focus:ring-2 focus:ring-blue-500 outline-none">
-                                    <p id="days_error" class="text-red-500 text-xs mt-1 hidden font-bold">חובה להזין לפחות יום מילואים אחד בשנת 2026 כדי להמשיך</p>
-                                </div>
-                                <div>
-                                    <label class="block font-medium mb-2 text-gray-700">ימי מילואים (צו 8) בין 7.10.23 ל-31.12.25:</label>
-                                    <input type="number" id="days_past" value="0" min="0" class="w-full p-3 border rounded-lg bg-gray-50 focus:ring-2 focus:ring-blue-500 outline-none">
-                                </div>
-                            </div>
+        <!-- Main Form Card -->
+        <div class="card p-6 md:p-10 mb-8" id="calculator-form">
+            <div id="steps">
+                <!-- Step 1: Days -->
+                <div id="step-1" class="step-content active">
+                    <h2 class="text-xl font-semibold mb-6 border-b pb-2 text-blue-800">שלב 1: ימי שירות ומדרג</h2>
+                    <div class="space-y-6">
+                        <div>
+                            <label class="block font-medium mb-2 text-gray-700">שיוך למדרג פעילות:</label>
+                            <select id="madrag" class="w-full p-3 border rounded-lg bg-gray-50 focus:ring-2 focus:ring-blue-500 outline-none">
+                                <option value="a_plus">מדרג א'+ (גדודים לוחמים)</option>
+                                <option value="a">מדרג א' (חטיבות)</option>
+                                <option value="b">מדרג ב' (אוגדות)</option>
+                                <option value="c">מדרג ג' (הגמ"ר)</option>
+                                <option value="d">מדרג ד' (הדרכה/אבטחה)</option>
+                                <option value="e">מדרג ה' (פיקודים ומטות)</option>
+                            </select>
                         </div>
-
-                        <!-- Step 2: Salary -->
-                        <div id="step-2" class="step-content">
-                            <h2 class="text-xl font-semibold mb-6 border-b pb-2 text-blue-800">שלב 2: הכנסה ושכר</h2>
-                            <div class="space-y-6">
-                                <div>
-                                    <label class="block font-medium mb-2 text-gray-700">סטטוס תעסוקתי:</label>
-                                    <select id="employment_status" class="w-full p-3 border rounded-lg bg-gray-50 focus:ring-2 focus:ring-blue-500 outline-none" onchange="toggleSalaryInput()">
-                                        <option value="employee">שכיר/ה</option>
-                                        <option value="self_employed">עצמאי/ת (כולל תוספת 25%)</option>
-                                        <option value="unemployed">מובטל/ת / סטודנט/ית (תגמול מינימום 328.76 ₪)</option>
-                                    </select>
-                                </div>
-                                <div id="salary_input_div">
-                                    <label class="block font-medium mb-2 text-gray-700">שכר ברוטו ממוצע לחודש (ש"ח):</label>
-                                    <input type="number" id="monthly_salary" value="10000" min="0" class="w-full p-3 border rounded-lg bg-gray-50 focus:ring-2 focus:ring-blue-500 outline-none text-left">
-                                </div>
-                            </div>
+                        <div>
+                            <label class="block font-medium mb-2 text-gray-700">מספר ימי מילואים בשנת 2026:</label>
+                            <input type="number" id="days_2026" placeholder="הזן מספר ימים" min="1" class="w-full p-3 border rounded-lg bg-gray-50 focus:ring-2 focus:ring-blue-500 outline-none">
+                            <p id="days_error" class="text-red-500 text-xs mt-1 hidden font-bold">חובה להזין לפחות יום מילואים אחד בשנת 2026 כדי להמשיך</p>
                         </div>
-
-                        <!-- Step 3: Family -->
-                        <div id="step-3" class="step-content">
-                            <h2 class="text-xl font-semibold mb-6 border-b pb-2 text-blue-800">שלב 3: משפחה וזכאויות</h2>
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                <label class="flex items-center gap-3 p-3 border rounded-lg hover:bg-gray-50 cursor-pointer">
-                                    <input type="checkbox" id="has_child_under_14" class="w-5 h-5 text-blue-600">
-                                    <span class="text-sm">ילד/ה מתחת לגיל 14</span>
-                                </label>
-                                <label class="flex items-center gap-3 p-3 border rounded-lg hover:bg-gray-50 cursor-pointer">
-                                    <input type="checkbox" id="has_special_needs_child" class="w-5 h-5 text-blue-600">
-                                    <span class="text-sm">ילד עם צרכים מיוחדים</span>
-                                </label>
-                                <label class="flex items-center gap-3 p-3 border rounded-lg hover:bg-gray-50 cursor-pointer">
-                                    <input type="checkbox" id="moved_house" class="w-5 h-5 text-blue-600">
-                                    <span class="text-sm">עברתי דירה ב-2026</span>
-                                </label>
-                                <label class="flex items-center gap-3 p-3 border rounded-lg hover:bg-gray-50 cursor-pointer">
-                                    <input type="checkbox" id="maternity_leave" class="w-5 h-5 text-blue-600">
-                                    <span class="text-sm">בת זוג בחופשת לידה</span>
-                                </label>
-                                <label class="flex items-center gap-3 p-3 border rounded-lg hover:bg-gray-50 cursor-pointer">
-                                    <input type="checkbox" id="is_student" class="w-5 h-5 text-blue-600">
-                                    <span class="text-sm">סטודנט/ית (תשפ"ו)</span>
-                                </label>
-                            </div>
-                            <div class="mt-6">
-                                <label class="block font-medium mb-1 text-sm text-gray-700">תפקיד פיקודי:</label>
-                                <select id="commander_role" class="w-full p-3 border rounded bg-gray-50 outline-none text-sm">
-                                    <option value="none">ללא תפקיד פיקודי</option>
-                                    <option value="mm">מ"מ / סמ"פ</option>
-                                    <option value="mp">מ"פ / סמג"ד</option>
-                                    <option value="mgd">מג"ד</option>
-                                </select>
-                            </div>
+                        <div>
+                            <label class="block font-medium mb-2 text-gray-700">ימי מילואים (צו 8) בין 7.10.23 ל-31.12.25:</label>
+                            <input type="number" id="days_past" value="0" min="0" class="w-full p-3 border rounded-lg bg-gray-50 focus:ring-2 focus:ring-blue-500 outline-none">
                         </div>
-                    </div>
-
-                    <!-- Navigation -->
-                    <div class="flex justify-between mt-10">
-                        <button id="prevBtn" class="px-6 py-2 bg-gray-200 rounded-lg text-gray-700 hidden hover:bg-gray-300 transition">חזור</button>
-                        <button id="nextBtn" class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition mr-auto">המשך</button>
-                        <button id="calcBtn" class="px-8 py-2 bg-green-600 text-white rounded-lg hidden hover:bg-green-700 transition font-bold shadow-lg">חשב סך הכל</button>
                     </div>
                 </div>
 
-                <!-- Result Section -->
-                <div id="results" class="hidden space-y-6 pb-12">
-                    <div class="card p-8 bg-blue-900 text-white text-center relative overflow-hidden">
-                        <div class="relative z-10">
-                            <h3 class="text-xl mb-2 opacity-90">סך כספי משוער לשנת 2026:</h3>
-                            <div class="text-6xl font-extrabold" id="total_amount">₪0</div>
-                            <div class="mt-4 flex justify-around text-sm opacity-80 border-t border-blue-800 pt-4">
-                                <div>תגמול שכר: <span id="res_salary">₪0</span></div>
-                                <div>סך מענקים: <span id="res_bonuses">₪0</span></div>
-                            </div>
+                <!-- Step 2: Salary -->
+                <div id="step-2" class="step-content">
+                    <h2 class="text-xl font-semibold mb-6 border-b pb-2 text-blue-800">שלב 2: הכנסה ושכר</h2>
+                    <div class="space-y-6">
+                        <div>
+                            <label class="block font-medium mb-2 text-gray-700">סטטוס תעסוקתי:</label>
+                            <select id="employment_status" class="w-full p-3 border rounded-lg bg-gray-50 focus:ring-2 focus:ring-blue-500 outline-none" onchange="toggleSalaryInput()">
+                                <option value="employee">שכיר/ה</option>
+                                <option value="self_employed">עצמאי/ת (כולל תוספת 25%)</option>
+                                <option value="unemployed">מובטל/ת / סטודנט/ית (תגמול מינימום 328.76 ₪)</option>
+                            </select>
                         </div>
-                        <div class="absolute top-0 right-0 p-4 opacity-20 pointer-events-none">
-                            <svg class="w-32 h-32" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17h-2v-2h2v2zm2.07-7.75l-.9.92C13.45 12.9 13 13.5 13 15h-2v-.5c0-1.1.45-2.1 1.17-2.83l1.24-1.26c.37-.36.59-.86.59-1.41 0-1.1-.9-2-2-2s-2 .9-2 2H8c0-2.21 1.79-4 4-4s4 1.79 4 4c0 .88-.36 1.68-.93 2.25z"/></svg>
-                        </div>
-                    </div>
-
-                    <!-- AI Insights Trigger -->
-                    <div id="ai-insights-container" class="card p-6 border-2 border-indigo-200 bg-indigo-50 ai-glow">
-                        <div class="flex items-center justify-between mb-4">
-                            <div>
-                                <h4 class="font-bold text-indigo-900 text-lg">ניתוח זכויות אישי ✨</h4>
-                                <p class="text-sm text-indigo-700">ה-AI שלנו ינתח את המצב שלך וימליץ על צעדים למיצוי זכויות</p>
-                            </div>
-                            <button id="getAiInsightsBtn" class="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-2 rounded-full font-bold transition flex items-center gap-2 shadow-lg">
-                                <span>נתח ב-AI ✨</span>
-                            </button>
-                        </div>
-                        <div id="ai-insights-content" class="hidden text-gray-800 text-sm leading-relaxed p-4 bg-white rounded-lg border border-indigo-100 whitespace-pre-wrap">
-                            <!-- Insights load here -->
+                        <div id="salary_input_div">
+                            <label class="block font-medium mb-2 text-gray-700">שכר ברוטו ממוצע לחודש (ש"ח):</label>
+                            <input type="number" id="monthly_salary" value="10000" min="0" class="w-full p-3 border rounded-lg bg-gray-50 focus:ring-2 focus:ring-blue-500 outline-none text-left">
                         </div>
                     </div>
+                </div>
 
-                    <div id="breakdown" class="space-y-3"></div>
-
-                    <div class="card p-6 border-t-4 border-teal-500 text-center bg-teal-50">
-                        <p class="text-gray-700 mb-4 font-medium italic">מעריכים את הכלי? פירגון קטן עוזר להמשיך לפתח:</p>
-                        <div class="flex flex-col items-center gap-3">
-                            <a href="https://www.bitpay.co.il/app/payme?p=0584764309" target="_blank" class="inline-flex items-center justify-center gap-2 px-8 py-3 bg-teal-600 text-white font-bold rounded-full shadow-md text-lg hover:bg-teal-700 transition">
-                                <span>לתרומה למפתח ב-Bit</span>
-                            </a>
-                            <p class="text-sm text-teal-800 font-semibold">מספר להעברה: 058-4764309</p>
-                        </div>
+                <!-- Step 3: Family -->
+                <div id="step-3" class="step-content">
+                    <h2 class="text-xl font-semibold mb-6 border-b pb-2 text-blue-800">שלב 3: משפחה וזכאויות</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <label class="flex items-center gap-3 p-3 border rounded-lg hover:bg-gray-50 cursor-pointer">
+                            <input type="checkbox" id="has_child_under_14" class="w-5 h-5 text-blue-600">
+                            <span class="text-sm">ילד/ה מתחת לגיל 14</span>
+                        </label>
+                        <label class="flex items-center gap-3 p-3 border rounded-lg hover:bg-gray-50 cursor-pointer">
+                            <input type="checkbox" id="has_special_needs_child" class="w-5 h-5 text-blue-600">
+                            <span class="text-sm">ילד עם צרכים מיוחדים</span>
+                        </label>
+                        <label class="flex items-center gap-3 p-3 border rounded-lg hover:bg-gray-50 cursor-pointer">
+                            <input type="checkbox" id="moved_house" class="w-5 h-5 text-blue-600">
+                            <span class="text-sm">עברתי דירה ב-2026</span>
+                        </label>
+                        <label class="flex items-center gap-3 p-3 border rounded-lg hover:bg-gray-50 cursor-pointer">
+                            <input type="checkbox" id="maternity_leave" class="w-5 h-5 text-blue-600">
+                            <span class="text-sm">בת זוג בחופשת לידה</span>
+                        </label>
+                        <label class="flex items-center gap-3 p-3 border rounded-lg hover:bg-gray-50 cursor-pointer">
+                            <input type="checkbox" id="is_student" class="w-5 h-5 text-blue-600">
+                            <span class="text-sm">סטודנט/ית (תשפ"ו)</span>
+                        </label>
                     </div>
-
-                    <button onclick="location.reload()" class="w-full py-3 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 font-medium transition">חישוב חדש</button>
+                    <div class="mt-6">
+                        <label class="block font-medium mb-1 text-sm text-gray-700">תפקיד פיקודי:</label>
+                        <select id="commander_role" class="w-full p-3 border rounded bg-gray-50 outline-none text-sm">
+                            <option value="none">ללא תפקיד פיקודי</option>
+                            <option value="mm">מ"מ / סמ"פ</option>
+                            <option value="mp">מ"פ / סמג"ד</option>
+                            <option value="mgd">מג"ד</option>
+                        </select>
+                    </div>
                 </div>
             </div>
 
-            <!-- Sidebar: AI Chat -->
-            <div class="lg:col-span-1">
-                <div class="card flex flex-col h-[600px] sticky top-8 border-2 border-indigo-100 shadow-xl overflow-hidden">
-                    <div class="bg-indigo-600 p-4 text-white font-bold flex items-center justify-between">
-                        <span>עוזר מילואים חכם ✨</span>
-                        <div class="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
-                    </div>
-                    <div id="chat-messages" class="flex-1 overflow-y-auto p-4 space-y-4 bg-gray-50 text-sm">
-                        <div class="bg-indigo-100 p-3 rounded-lg rounded-tr-none ml-4 text-indigo-900">
-                            שלום! אני עוזר ה-AI שלך. יש לך שאלות על מענקי 2026? איך להגיש תביעה? אולי על זכויות סטודנטים? שאל אותי הכל!
-                        </div>
-                    </div>
-                    <div class="p-3 bg-white border-t flex gap-2">
-                        <input type="text" id="chat-input" placeholder="שאל שאלה..." class="flex-1 p-2 border rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none text-sm">
-                        <button id="chat-send" class="bg-indigo-600 text-white p-2 rounded-lg hover:bg-indigo-700 transition">
-                            <svg class="w-5 h-5 transform rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path></svg>
-                        </button>
+            <!-- Navigation -->
+            <div class="flex justify-between mt-10">
+                <button id="prevBtn" class="px-6 py-2 bg-gray-200 rounded-lg text-gray-700 hidden hover:bg-gray-300 transition">חזור</button>
+                <button id="nextBtn" class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition mr-auto">המשך</button>
+                <button id="calcBtn" class="px-8 py-2 bg-green-600 text-white rounded-lg hidden hover:bg-green-700 transition font-bold shadow-lg">חשב סך הכל</button>
+            </div>
+        </div>
+
+        <!-- Result Section -->
+        <div id="results" class="hidden space-y-6 pb-12">
+            <div class="card p-8 bg-blue-900 text-white text-center relative overflow-hidden">
+                <div class="relative z-10">
+                    <h3 class="text-xl mb-2 opacity-90">סך כספי משוער לשנת 2026:</h3>
+                    <div class="text-6xl font-extrabold" id="total_amount">₪0</div>
+                    <div class="mt-4 flex justify-around text-sm opacity-80 border-t border-blue-800 pt-4">
+                        <div>תגמול שכר: <span id="res_salary">₪0</span></div>
+                        <div>סך מענקים: <span id="res_bonuses">₪0</span></div>
                     </div>
                 </div>
+                <div class="absolute top-0 right-0 p-4 opacity-20 pointer-events-none">
+                    <svg class="w-32 h-32" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17h-2v-2h2v2zm2.07-7.75l-.9.92C13.45 12.9 13 13.5 13 15h-2v-.5c0-1.1.45-2.1 1.17-2.83l1.24-1.26c.37-.36.59-.86.59-1.41 0-1.1-.9-2-2-2s-2 .9-2 2H8c0-2.21 1.79-4 4-4s4 1.79 4 4c0 .88-.36 1.68-.93 2.25z"/></svg>
+                </div>
             </div>
+
+            <div id="breakdown" class="space-y-3"></div>
+
+            <div class="card p-6 border-t-4 border-teal-500 text-center bg-teal-50">
+                <p class="text-gray-700 mb-4 font-medium italic">מעריכים את הכלי? פירגון קטן עוזר להמשיך לפתח:</p>
+                <div class="flex flex-col items-center gap-3">
+                    <a href="https://www.bitpay.co.il/app/payme?p=0584764309" target="_blank" class="inline-flex items-center justify-center gap-2 px-8 py-3 bg-teal-600 text-white font-bold rounded-full shadow-md text-lg hover:bg-teal-700 transition">
+                        <span>לתרומה למפתח ב-Bit</span>
+                    </a>
+                    <p class="text-sm text-teal-800 font-semibold">מספר להעברה: 058-4764309</p>
+                </div>
+            </div>
+
+            <button onclick="location.reload()" class="w-full py-3 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 font-medium transition">חישוב חדש</button>
         </div>
 
         <!-- Disclaimer -->
         <footer class="mt-12 text-center text-gray-500 text-xs px-4 pb-12 border-t pt-8">
             <p class="leading-relaxed">
-                <strong>הבהרה:</strong> המחשבון הינו כלי עזר פרטי. החישובים והניתוחים מבוססי ה-AI הם הערכות בלבד על בסיס מידע פומבי. המפתח וה-AI אינם מהווים ייעוץ משפטי רשמי. תגמול המינימום מעודכן ל-328.76 ₪ ליום.
+                <strong>הבהרה:</strong> המחשבון הינו כלי עזר פרטי. החישובים הם הערכות בלבד על בסיס מידע פומבי. המפתח אינו מהווה ייעוץ משפטי רשמי. תגמול המינימום מעודכן ל-328.76 ₪ ליום.
             </p>
         </footer>
     </div>
 
     <script>
-        // API Config
-        // ב-Vercel, מפתח ה-API חייב להיות מוזן כאן בין הגרשיים כדי לעבוד.
-        // תוכל גם להעביר אותו בכתובת האתר כך: ?key=YOUR_KEY
-        const urlParams = new URLSearchParams(window.location.search);
-        const apiKey = urlParams.get('key') || ""; 
-
         let currentStep = 1;
         const totalSteps = 3;
 
@@ -281,55 +218,43 @@
             calcBtn.classList.toggle('hidden', currentStep !== totalSteps);
         }
 
-        // Logic
-        let lastCalculationResults = {};
-
         function calculateResults() {
-            const data = {
-                madrag: document.getElementById('madrag').value,
-                days_2026: parseInt(document.getElementById('days_2026').value) || 0,
-                days_past: parseInt(document.getElementById('days_past').value) || 0,
-                employment: document.getElementById('employment_status').value,
-                salary: parseFloat(document.getElementById('monthly_salary').value) || 0,
-                has_child: document.getElementById('has_child_under_14').checked,
-                special_needs: document.getElementById('has_special_needs_child').checked,
-                moved: document.getElementById('moved_house').checked,
-                maternity: document.getElementById('maternity_leave').checked,
-                is_student: document.getElementById('is_student').checked,
-                commander: document.getElementById('commander_role').value
-            };
-
-            const total_cumulative_days = data.days_2026 + data.days_past;
+            const madrag = document.getElementById('madrag').value;
+            const days_2026 = parseInt(document.getElementById('days_2026').value) || 0;
+            const days_past = parseInt(document.getElementById('days_past').value) || 0;
+            const employment = document.getElementById('employment_status').value;
+            const salary = parseFloat(document.getElementById('monthly_salary').value) || 0;
+            
+            const total_cumulative_days = days_2026 + days_past;
             let salary_total = 0;
             let bonuses_total = 0;
             const list = [];
 
             const min_daily = 328.76;
-            let daily_base = data.salary / 30;
+            let daily_base = salary / 30;
             
-            if (data.employment === 'unemployed') {
+            if (employment === 'unemployed') {
                 daily_base = min_daily;
-            } else if (data.employment === 'self_employed') {
+            } else if (employment === 'self_employed') {
                 daily_base *= 1.25;
             }
             
             if (daily_base < min_daily) daily_base = min_daily;
             
-            salary_total = daily_base * data.days_2026;
+            salary_total = daily_base * days_2026;
             list.push({ 
                 title: "תגמול מילואים (שכר)", 
                 amount: salary_total, 
-                desc: `${data.days_2026} ימים בשיעור ${daily_base.toFixed(2)} ש"ח ליום ${data.employment === 'unemployed' ? '(תגמול מינימום)' : ''}` 
+                desc: `${days_2026} ימים בשיעור ${daily_base.toFixed(2)} ש"ח ליום ${employment === 'unemployed' ? '(מינימום)' : ''}` 
             });
 
+            // הערכת מענקי צבירה פשוטה
             if (total_cumulative_days > 40) {
-                const b = (data.days_2026 * 50); 
+                const b = (days_2026 * 50); 
                 bonuses_total += b;
                 list.push({ title: "מענקי צבירה (הערכה)", amount: b, desc: "מבוסס על סך ימי שירות מעל 40" });
             }
             
-            lastCalculationResults = { data, list, total: salary_total + bonuses_total, min_daily_ref: min_daily };
-
             document.getElementById('calculator-form').classList.add('hidden');
             document.getElementById('results').classList.remove('hidden');
             document.getElementById('total_amount').innerText = `₪${Math.round(salary_total + bonuses_total).toLocaleString()}`;
@@ -347,94 +272,6 @@
         }
 
         calcBtn.addEventListener('click', calculateResults);
-
-        // --- GEMINI API INTEGRATIONS ---
-
-        async function callGemini(prompt, systemInstruction = "You are an expert on Israeli military reserve benefits.") {
-            if (!apiKey || apiKey === "" || apiKey === "null") {
-                return "מפתח API חסר. עליך להדביק את המפתח בקוד או להוסיף אותו לכתובת האתר כך: ?key=המפתח_שלך";
-            }
-
-            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
-            let retryCount = 0;
-            const maxRetries = 5;
-            
-            while (retryCount < maxRetries) {
-                try {
-                    const response = await fetch(url, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({
-                            contents: [{ parts: [{ text: prompt }] }],
-                            systemInstruction: { parts: [{ text: systemInstruction }] }
-                        })
-                    });
-                    
-                    if (!response.ok) {
-                        const err = await response.json();
-                        return `שגיאה (${response.status}): ${err.error?.message || 'לא ידוע'}`;
-                    }
-
-                    const result = await response.json();
-                    return result.candidates?.[0]?.content?.parts?.[0]?.text || "לא התקבלה תשובה.";
-                } catch (e) {
-                    retryCount++;
-                    if (retryCount >= maxRetries) return "שגיאת תקשורת חמורה.";
-                    await new Promise(r => setTimeout(r, Math.pow(2, retryCount) * 1000));
-                }
-            }
-            return "שגיאה בחיבור ל-AI.";
-        }
-
-        document.getElementById('getAiInsightsBtn').addEventListener('click', async () => {
-            const btn = document.getElementById('getAiInsightsBtn');
-            const content = document.getElementById('ai-insights-content');
-            
-            btn.disabled = true;
-            btn.innerHTML = `<span class="loading-dots">מנתח</span>`;
-            content.classList.remove('hidden');
-            content.innerText = "ה-AI מנתח את הפרופיל שלך כעת...";
-
-            const prompt = `נתח את נתוני המילואים הבאים עבור שנת 2026 וספק המלצות למיצוי זכויות:
-            נתונים: ${JSON.stringify(lastCalculationResults.data)}
-            סכום משוער שחושב: ${lastCalculationResults.total} ש"ח.
-            התמקד ב: מענקים מיוחדים, זכויות סטודנטים/עצמאים, תגמולי משפחה. החזר תשובה בעברית.`;
-
-            const insights = await callGemini(prompt, "אתה יועץ זכויות מילואים מקצועי.");
-            content.innerText = insights;
-            btn.disabled = false;
-            btn.innerText = "ניתוח מחדש ✨";
-        });
-
-        const chatInput = document.getElementById('chat-input');
-        const chatSend = document.getElementById('chat-send');
-        const chatMessages = document.getElementById('chat-messages');
-
-        async function handleChat() {
-            const userMsg = chatInput.value.trim();
-            if (!userMsg) return;
-
-            const userDiv = document.createElement('div');
-            userDiv.className = "bg-white p-3 rounded-lg rounded-tl-none mr-4 text-gray-800 border self-end";
-            userDiv.innerText = userMsg;
-            chatMessages.appendChild(userDiv);
-            chatInput.value = "";
-            chatMessages.scrollTop = chatMessages.scrollHeight;
-
-            const loadingDiv = document.createElement('div');
-            loadingDiv.className = "bg-indigo-100 p-3 rounded-lg rounded-tr-none ml-4 text-indigo-900 italic loading-dots";
-            loadingDiv.innerText = "חושב";
-            chatMessages.appendChild(loadingDiv);
-
-            const aiResponse = await callGemini(userMsg, "אתה עוזר מילואים חכם.");
-            
-            loadingDiv.classList.remove('italic', 'loading-dots');
-            loadingDiv.innerText = aiResponse;
-            chatMessages.scrollTop = chatMessages.scrollHeight;
-        }
-
-        chatSend.addEventListener('click', handleChat);
-        chatInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') handleChat(); });
     </script>
 </body>
 </html>
