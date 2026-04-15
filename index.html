@@ -3,6 +3,7 @@
 <head>
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1756702472007434"
      crossorigin="anonymous"></script>
+
     
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -224,7 +225,8 @@
 
     <script>
         // API Config
-        const apiKey = ""; // Runtime provided
+        // שים לב: ב-Vercel עליך להחליף את המחרוזת הריקה במפתח API שלך מ-Google AI Studio
+        const apiKey = ""; 
         let currentStep = 1;
         const totalSteps = 3;
 
@@ -353,6 +355,10 @@
         // --- GEMINI API INTEGRATIONS ---
 
         async function callGemini(prompt, systemInstruction = "You are an expert on Israeli military reserve benefits.") {
+            if (!apiKey || apiKey === "") {
+                return "שגיאה: מפתח ה-API חסר. אם העלית את הקוד ל-Vercel, עליך להגדיר את המפתח במשתנה apiKey בקוד.";
+            }
+
             const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
             let retryCount = 0;
             const maxRetries = 5;
@@ -367,10 +373,18 @@
                             systemInstruction: { parts: [{ text: systemInstruction }] }
                         })
                     });
+                    
+                    if (!response.ok) {
+                        const err = await response.json();
+                        return `שגיאת API (${response.status}): ${err.error?.message || 'לא ידוע'}`;
+                    }
+
                     const result = await response.json();
-                    return result.candidates?.[0]?.content?.parts?.[0]?.text;
+                    const aiText = result.candidates?.[0]?.content?.parts?.[0]?.text;
+                    return aiText || "לא התקבלה תשובה מהמודל.";
                 } catch (e) {
                     retryCount++;
+                    if (retryCount >= maxRetries) return "שגיאת תקשורת: וודא שהחיבור לאינטרנט תקין ושהמפתח תקין.";
                     await new Promise(r => setTimeout(r, Math.pow(2, retryCount) * 1000));
                 }
             }
@@ -437,5 +451,4 @@
 
     </script>
 </body>
-</html>
 </html>
